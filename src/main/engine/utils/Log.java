@@ -1,7 +1,12 @@
 package main.engine.utils;
 
+import java.io.File;
+import java.io.IOException;
+import java.util.logging.ConsoleHandler;
+import java.util.logging.FileHandler;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import java.util.logging.SimpleFormatter;
 
 /**
  * Facade over java.util.logging for simplified logging.
@@ -14,6 +19,38 @@ import java.util.logging.Logger;
 public class Log {
     
     private static final Logger logger = Logger.getLogger("Game Engine");
+
+    static {
+        try{
+            // Create logs directory 
+            File logsDir = new File("logs");
+            if(!logsDir.exists()) logsDir.mkdir();
+            
+            // Create File handler
+            FileHandler fileHandler = new FileHandler("logs/game.log", 1024 * 1024, 3, false);
+            
+            // Set Formatter
+            fileHandler.setFormatter(new SimpleFormatter());
+
+            // Add handler to logger
+            logger.addHandler(fileHandler);
+
+            // Set Level
+            logger.setLevel(Level.ALL); // Log everything to file
+            fileHandler.setLevel(Level.ALL); 
+            
+            // Disable parent handlers 
+            logger.setUseParentHandlers(false); // Prevents duplicate console output
+
+            // Add Console handler
+            ConsoleHandler consoleHandler = new ConsoleHandler();
+            consoleHandler.setLevel(Level.INFO); // Only INFO+ to console
+            logger.addHandler(consoleHandler);
+
+        }catch(IOException e){
+            System.err.println("Failed to setup file logging: "+e.getMessage());
+        }
+    }
 
     /** Prevents instantiation of utility class. */
     private Log(){
