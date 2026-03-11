@@ -1,4 +1,4 @@
-# Java 2D Game Framework
+# Gwen2D - Java 2D Game Framework
 
 A lightweight framework for building 2D games on top of Java Swing. Provides structure and utilities for rapid game development while maintaining flexibility.
 
